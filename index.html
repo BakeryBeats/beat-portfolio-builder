@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beat Portfolio Builder | Bakery Beats</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
+        .tagline {
+            color: #bbb;
+            font-size: 16px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 12px 30px;
+            border: 2px solid #444;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            background: #ffd700;
+            color: #1a1a2e;
+            border-color: #ffd700;
+        }
+        
+        .tab-btn:hover {
+            border-color: #ffd700;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* CREATE FORM */
+        .form-container {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ffd700;
+            font-size: 14px;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #444;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: #999;
+        }
+        
+        .track-section {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .add-track-btn {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        
+        .add-track-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .remove-btn {
+            background: #ff6b6b;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .submit-btn:hover {
+            transform: scale(1.02);
+        }
+        
+        /* GALLERY */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .portfolio-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .portfolio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255,215,0,0.2);
+        }
+        
+        .artist-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+        
+        .artist-info {
+            color: #bbb;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .tracks-list {
+            margin: 15px 0;
+        }
+        
+        .track-item {
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #ffd700;
+        }
+        
+        .track-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .track-genre {
+            font-size: 12px;
+            color: #999;
+            display: inline-block;
+            background: rgba(255,215,0,0.2);
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        
+        .track-links {
+            margin-top: 10px;
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .link-btn {
+            padding: 5px 10px;
+            background: #ffd700;
+            color: #1a1a2e;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        .link-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(255,215,0,0.1);
+            border-radius: 15px;
+            border: 2px dashed #ffd700;
+        }
+        
+        .cta-btn {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 15px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s;
+        }
+        
+        .cta-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">🎵 Bakery Beats</div>
+            <div class="logo">Portfolio Builder</div>
+            <p class="tagline">Showcase your tracks made with Bakery Beats</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('gallery')">📺 Gallery</button>
+            <button class="tab-btn" onclick="switchTab('create')">➕ Create Portfolio</button>
+        </div>
+        
+        <!-- GALLERY TAB -->
+        <div id="gallery" class="tab-content active">
+            <div id="gallery-content" class="gallery"></div>
+            <div class="cta-section">
+                <h2>🎵 No portfolios yet?</h2>
+                <p>Be the first to showcase your track!</p>
+                <button class="cta-btn" onclick="switchTab('create')">Create Your Portfolio</button>
+            </div>
+        </div>
+        
+        <!-- CREATE TAB -->
+        <div id="create" class="tab-content">
+            <div class="form-container">
+                <h2 style="margin-bottom: 20px; color: #ffd700;">Create Your Portfolio</h2>
+                
+                <div class="form-group">
+                    <label>Artist Name *</label>
+                    <input type="text" id="artistName" placeholder="Your artist/producer name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Bio (Optional)</label>
+                    <textarea id="bio" placeholder="Tell us about yourself..." rows="3"></textarea>
+                </div>
+                
+                <div id="tracksContainer"></div>
+                
+                <button class="add-track-btn" onclick="addTrack()">+ Add Track</button>
+                
+                <button class="submit-btn" onclick="savePortfolio()">🚀 Publish Portfolio</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize
+        loadPortfolios();
+        initTracks();
+        
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function initTracks() {
+            const container = document.getElementById('tracksContainer');
+            container.innerHTML = '';
+            addTrack();
+        }
+        
+        function addTrack() {
+            const container = document.getElementById('tracksContainer');
+            const index = container.children.length;
+            
+            const trackHTML = `
+                <div class="track-section" id="track-${index}">
+                    <label style="color: #ffd700; font-size: 16px; margin-bottom: 15px;">Track ${index + 1}</label>
+                    
+                    <div class="form-group">
+                        <label>Track Name *</label>
+                        <input type="text" class="track-name" placeholder="Song title" required>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group">
+                            <label>Genre</label>
+                            <input type="text" class="track-genre" placeholder="e.g., Trap, R&B">
+                        </div>
+                        <div class="form-group">
+                            <label>BPM</label>
+                            <input type="number" class="track-bpm" placeholder="140" min="60" max="200">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Spotify Link (Optional)</label>
+                        <input type="url" class="track-spotify" placeholder="https://open.spotify.com/track/...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>YouTube Link (Optional)</label>
+                        <input type="url" class="track-youtube" placeholder="https://youtube.com/...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>SoundCloud Link (Optional)</label>
+                        <input type="url" class="track-soundcloud" placeholder="https://soundcloud.com/...">
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group">
+                            <label>Streams/Views (Optional)</label>
+                            <input type="number" class="track-streams" placeholder="e.g., 5000" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Release Date (Optional)</label>
+                            <input type="date" class="track-date">
+                        </div>
+                    </div>
+                    
+                    ${index > 0 ? `<button class="remove-btn" onclick="removeTrack(${index})">Remove Track</button>` : ''}
+                </div>
+            `;
+            
+            container.innerHTML += trackHTML;
+        }
+        
+        function removeTrack(index) {
+            document.getElementById(`track-${index}`).remove();
+        }
+        
+        function savePortfolio() {
+            const artistName = document.getElementById('artistName').value.trim();
+            const bio = document.getElementById('bio').value.trim();
+            
+            if (!artistName) {
+                alert('Please enter artist name!');
+                return;
+            }
+            
+            const tracks = [];
+            document.querySelectorAll('.track-section').forEach(section => {
+                const name = section.querySelector('.track-name').value.trim();
+                if (name) {
+                    tracks.push({
+                        name: name,
+                        genre: section.querySelector('.track-genre').value.trim(),
+                        bpm: section.querySelector('.track-bpm').value.trim(),
+                        spotify: section.querySelector('.track-spotify').value.trim(),
+                        youtube: section.querySelector('.track-youtube').value.trim(),
+                        soundcloud: section.querySelector('.track-soundcloud').value.trim(),
+                        streams: section.querySelector('.track-streams').value.trim(),
+                        date: section.querySelector('.track-date').value.trim()
+                    });
+                }
+            });
+            
+            if (tracks.length === 0) {
+                alert('Please add at least one track!');
+                return;
+            }
+            
+            const portfolio = {
+                id: Date.now(),
+                artistName: artistName,
+                bio: bio,
+                tracks: tracks,
+                createdAt: new Date().toLocaleDateString()
+            };
+            
+            let portfolios = JSON.parse(localStorage.getItem('portfolios') || '[]');
+            portfolios.push(portfolio);
+            localStorage.setItem('portfolios', JSON.stringify(portfolios));
+            
+            alert('✅ Portfolio published! Check the gallery!');
+            document.getElementById('artistName').value = '';
+            document.getElementById('bio').value = '';
+            initTracks();
+            switchTab('gallery');
+            loadPortfolios();
+        }
+        
+        function loadPortfolios() {
+            const portfolios = JSON.parse(localStorage.getItem('portfolios') || '[]');
+            const gallery = document.getElementById('gallery-content');
+            
+            if (portfolios.length === 0) {
+                gallery.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <h2>No portfolios yet</h2>
+                        <p>Be the first to showcase your beats!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            gallery.innerHTML = portfolios.map(portfolio => `
+                <div class="portfolio-card">
+                    <div class="artist-name">🎵 ${portfolio.artistName}</div>
+                    <div class="artist-info">Created: ${portfolio.createdAt}</div>
+                    
+                    ${portfolio.bio ? `<p style="color: #ddd; font-size: 14px; margin-bottom: 15px;'>"${portfolio.bio}"</p>` : ''}
+                    
+                    <div class="tracks-list">
+                        ${portfolio.tracks.map(track => `
+                            <div class="track-item">
+                                <div class="track-name">🎧 ${track.name}</div>
+                                <div>
+                                    ${track.genre ? `<span class="track-genre">${track.genre}</span>` : ''}
+                                    ${track.bpm ? `<span class="track-genre">${track.bpm} BPM</span>` : ''}
+                                </div>
+                                ${track.streams ? `<div style="color: #999; font-size: 12px; margin-top: 5px;">📊 ${track.streams} streams</div>` : ''}
+                                <div class="track-links">
+                                    ${track.spotify ? `<a href="${track.spotify}" target="_blank" class="link-btn">Spotify</a>` : ''}
+                                    ${track.youtube ? `<a href="${track.youtube}" target="_blank" class="link-btn">YouTube</a>` : ''}
+                                    ${track.soundcloud ? `<a href="${track.soundcloud}" target="_blank" class="link-btn">SoundCloud</a>` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
